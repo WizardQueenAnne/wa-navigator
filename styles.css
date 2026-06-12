@@ -8,15 +8,19 @@ body,
   width: 100%;
   height: 100%;
   margin: 0;
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #111827;
 }
 
 button,
 input {
   font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.3);
+  outline-offset: 2px;
 }
 
 .app-shell {
@@ -127,6 +131,11 @@ button:hover {
   background: #e5e7eb;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .primary-button {
   width: 100%;
   margin-top: 4px;
@@ -139,8 +148,34 @@ button:hover {
 }
 
 .status {
+  min-height: 20px;
   margin-top: 12px;
   line-height: 1.4;
+}
+
+.voice-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.voice-card h2 {
+  margin-bottom: 3px;
+}
+
+.toggle-button {
+  min-width: 58px;
+}
+
+.toggle-button.active {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.secondary-button {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
 .summary-grid {
@@ -184,11 +219,7 @@ li small {
   color: #6b7280;
 }
 
-.map-wrap {
-  width: 100%;
-  height: 100%;
-}
-
+.map-wrap,
 #map {
   width: 100%;
   height: 100%;
@@ -197,6 +228,7 @@ li small {
 .car-marker {
   display: grid;
   place-items: center;
+  border: 3px solid #ffffff;
   border-radius: 999px;
   background: #2563eb;
   color: #ffffff;
