@@ -1,3 +1,7 @@
+function getEnvironmentVariable(name) {
+  return globalThis.Netlify?.env?.get(name) || process.env[name];
+}
+
 export default async function handler(request) {
   if (request.method !== "POST") {
     return Response.json(
@@ -17,9 +21,14 @@ export default async function handler(request) {
       );
     }
 
-    if (!process.env.ORS_API_KEY) {
+    const apiKey = getEnvironmentVariable("ORS_API_KEY")?.trim();
+
+    if (!apiKey) {
       return Response.json(
-        { error: "Missing ORS_API_KEY environment variable." },
+        {
+          error:
+            "ORS_API_KEY is not available to this Netlify Function. Add it in Netlify Environment Variables, then trigger a new deploy."
+        },
         { status: 500 }
       );
     }
@@ -29,14 +38,11 @@ export default async function handler(request) {
       {
         method: "POST",
         headers: {
-          Authorization: process.env.ORS_API_KEY,
+          Authorization: apiKey,
           "Content-Type": "application/json",
           Accept: "application/json, application/geo+json"
         },
-        body: JSON.stringify({
-          coordinates,
-          instructions: true
-        })
+        body: JSON.stringify({ coordinates, instructions: true })
       }
     );
 
@@ -44,9 +50,7 @@ export default async function handler(request) {
 
     if (!orsResponse.ok) {
       return Response.json(
-        {
-          error: data?.error?.message || "OpenRouteService request failed."
-        },
+        { error: data?.error?.message || "OpenRouteService request failed." },
         { status: orsResponse.status }
       );
     }
